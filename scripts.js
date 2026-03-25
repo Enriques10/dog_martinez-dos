@@ -1,32 +1,64 @@
-let mapa = L.map('mapa').setView([20.070, -97.060], 13);
+// ===== MAPA =====
+var mapa = L.map('mapa').setView([20.070, -97.060], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapa);
+L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(mapa);
 
-let reportes = JSON.parse(localStorage.getItem("reportes")) || [];
+// ===== DATOS =====
+let reportes = [];
 
-const form = document.getElementById("formPerro");
-const lista = document.getElementById("lista");
-const buscador = document.getElementById("buscador");
+// ===== FORM =====
+document.getElementById("formPerro").addEventListener("submit", function(e){
+e.preventDefault();
 
-function mostrarReportes(filtro=""){
-lista.innerHTML="";
-mapa.eachLayer(layer=>{
-if(layer instanceof L.Marker){
-mapa.removeLayer(layer);
+let tipo = document.getElementById("tipo").value;
+let nombre = document.getElementById("nombre").value;
+let ubicacion = document.getElementById("ubicacion").value;
+let descripcion = document.getElementById("descripcion").value;
+let contacto = document.getElementById("contacto").value;
+let foto = document.getElementById("foto").files[0];
+
+if(!foto){
+alert("Sube una imagen");
+return;
 }
+
+// imagen local
+let urlImagen = URL.createObjectURL(foto);
+
+// coordenadas aleatorias (simulación)
+let lat = 20.070 + (Math.random() - 0.5) * 0.02;
+let lng = -97.060 + (Math.random() - 0.5) * 0.02;
+
+let reporte = {
+tipo, nombre, ubicacion, descripcion, contacto, foto: urlImagen, lat, lng
+};
+
+reportes.push(reporte);
+
+mostrarReportes();
+agregarMarcador(reporte);
+
+this.reset();
 });
 
-reportes.forEach(r=>{
-if(r.nombre.toLowerCase().includes(filtro) || r.ubicacion.toLowerCase().includes(filtro)){
+// ===== MOSTRAR =====
+function mostrarReportes(){
+
+let lista = document.getElementById("lista");
+lista.innerHTML = "";
+
+reportes.forEach(r => {
 
 let card = document.createElement("div");
-card.className="card";
+card.className = "card";
 
 card.innerHTML = `
 <img src="${r.foto}">
 <div class="card-body">
-<h3>${r.tipo}</h3>
-<p><b>${r.nombre}</b></p>
+<h3>${r.nombre}</h3>
+<p>${r.tipo}</p>
 <p>${r.ubicacion}</p>
 <p>${r.descripcion}</p>
 <p>📞 ${r.contacto}</p>
@@ -35,49 +67,44 @@ card.innerHTML = `
 
 lista.appendChild(card);
 
-let marker = L.marker([r.lat, r.lng]).addTo(mapa);
-marker.bindPopup(r.tipo);
-}
 });
 }
 
-form.addEventListener("submit", e=>{
-e.preventDefault();
+// ===== MAPA =====
+function agregarMarcador(r){
+L.marker([r.lat, r.lng])
+.addTo(mapa)
+.bindPopup(`<b>${r.nombre}</b><br>${r.tipo}`);
+}
 
-let file = document.getElementById("foto").files[0];
-let reader = new FileReader();
+// ===== BUSCADOR =====
+document.getElementById("buscador").addEventListener("input", function(){
 
-reader.onload = function(){
+let texto = this.value.toLowerCase();
 
-navigator.geolocation.getCurrentPosition(pos=>{
+let filtrados = reportes.filter(r =>
+r.nombre.toLowerCase().includes(texto) ||
+r.ubicacion.toLowerCase().includes(texto)
+);
 
-let nuevo = {
-tipo: tipo.value,
-nombre: nombre.value,
-ubicacion: ubicacion.value,
-descripcion: descripcion.value,
-contacto: contacto.value,
-foto: reader.result,
-lat: pos.coords.latitude,
-lng: pos.coords.longitude
-};
+let lista = document.getElementById("lista");
+lista.innerHTML = "";
 
-reportes.push(nuevo);
-localStorage.setItem("reportes", JSON.stringify(reportes));
+filtrados.forEach(r => {
 
-mostrarReportes();
-form.reset();
+let card = document.createElement("div");
+card.className = "card";
+
+card.innerHTML = `
+<img src="${r.foto}">
+<div class="card-body">
+<h3>${r.nombre}</h3>
+<p>${r.tipo}</p>
+<p>${r.ubicacion}</p>
+</div>
+`;
+
+lista.appendChild(card);
 
 });
-
-};
-
-reader.readAsDataURL(file);
-
 });
-
-buscador.addEventListener("input", ()=>{
-mostrarReportes(buscador.value.toLowerCase());
-});
-
-mostrarReportes();
