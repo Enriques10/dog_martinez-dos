@@ -81,9 +81,10 @@ background:#e65c00;
 /* MAPA */
 #mapa{
 height:400px;
+width:100%;
 border-radius:20px;
 margin-bottom:10px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
+z-index:1;
 }
 
 /* CONTENIDO */
