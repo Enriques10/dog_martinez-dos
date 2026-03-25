@@ -108,3 +108,7 @@ lista.appendChild(card);
 
 });
 });
+
+setTimeout(() => {
+mapa.invalidateSize();
+}, 500);
