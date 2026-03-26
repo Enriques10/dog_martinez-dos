@@ -58,7 +58,7 @@ card.innerHTML = `
 <img src="${r.foto}">
 <div class="card-body">
 <h3>${r.nombre}</h3>
-<p>${r.tipo}</p>
+<p><b>${r.tipo}</b></p>
 <p>${r.ubicacion}</p>
 <p>${r.descripcion}</p>
 <p>📞 ${r.contacto}</p>
@@ -68,6 +68,7 @@ card.innerHTML = `
 lista.appendChild(card);
 
 });
+
 }
 
 // ===== MAPA =====
