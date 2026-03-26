@@ -1,7 +1,7 @@
 // ===== MAPA =====
 var mapa = L.map('mapa').setView([20.070, -97.060], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 }).addTo(mapa);
 
