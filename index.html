@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="estilos.css">
 
-<!-- Leaflet -->
+<!-- ✅ LEAFLET CSS CORRECTO -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 </head>
@@ -32,17 +32,16 @@
 <option>Perro en situación de calle</option>
 </select>
 
-<input type="text" id="nombre" placeholder="Nombre">
-
+<input type="text" id="nombre" placeholder="Nombre" required>
 <input type="text" id="ubicacion" placeholder="Colonia" required>
 
 <textarea id="descripcion" placeholder="Descripción"></textarea>
 
 <input type="text" id="contacto" placeholder="Teléfono">
 
-<input type="file" id="foto" required>
+<input type="file" id="foto" accept="image/*" required>
 
-<button>Publicar</button>
+<button type="submit">Publicar</button>
 
 </form>
 
@@ -54,7 +53,7 @@
 
 <input id="buscador" placeholder="🔍 Buscar por colonia o nombre">
 
-<h2>Reportes</h2>
+<h2>🐾 Reportes</h2>
 
 <div id="lista" class="lista"></div>
 
@@ -62,7 +61,9 @@
 
 </main>
 
+<!-- ✅ LEAFLET JS CORRECTO -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script src="script.js"></script>
 
 </body>
