@@ -1,9 +1,15 @@
 // ===== MAPA =====
 var mapa = L.map('mapa').setView([20.070, -97.060], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// ✅ TILE CORRECTO (IMPORTANTE)
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 }).addTo(mapa);
+
+// 🔥 SOLUCIÓN BUG MAPA
+setTimeout(() => {
+    mapa.invalidateSize();
+}, 500);
 
 // ===== DATOS =====
 let reportes = [];
@@ -24,16 +30,13 @@ alert("Sube una imagen");
 return;
 }
 
-// imagen local
 let urlImagen = URL.createObjectURL(foto);
 
-// coordenadas aleatorias (simulación)
+// coordenadas simuladas
 let lat = 20.070 + (Math.random() - 0.5) * 0.02;
 let lng = -97.060 + (Math.random() - 0.5) * 0.02;
 
-let reporte = {
-tipo, nombre, ubicacion, descripcion, contacto, foto: urlImagen, lat, lng
-};
+let reporte = {tipo, nombre, ubicacion, descripcion, contacto, foto: urlImagen, lat, lng};
 
 reportes.push(reporte);
 
@@ -109,7 +112,3 @@ lista.appendChild(card);
 
 });
 });
-
-setTimeout(() => {
-mapa.invalidateSize();
-}, 500);
